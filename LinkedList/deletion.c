@@ -19,8 +19,14 @@ Node* deleteAtHead(Node* head){
     if(head==NULL){
         return NULL;
     }
-    head = head->next;
-    return head;
+    if(head->next==NULL){
+        free(head);
+        return NULL;
+    }
+    Node* temp = head;
+    temp = temp->next;
+    free(head);
+    return temp;
 }
 
 Node* deleteAtTail(Node* head){
@@ -28,13 +34,13 @@ Node* deleteAtTail(Node* head){
         return NULL;
     }
     Node* temp = head;
+    Node* prev = head;
     while(temp->next!=NULL){
-        if(temp->next->next == NULL){
-            break;
-        }
+        prev = temp;
         temp=temp->next;
     }
-    temp->next = NULL;
+    prev->next = NULL;
+    free(temp);
     return head;
 }
 
@@ -44,7 +50,9 @@ Node* deleteAtKthPosition(Node* head,  int k){
     }
     int i = 1;
     Node* temp = head;
-    while(i!=k -1 && temp->next!=NULL){
+    Node* prev = head;
+    while(i!=k && temp->next!=NULL){
+        prev = temp;
         temp=temp->next;
         i++;
     }
@@ -52,7 +60,8 @@ Node* deleteAtKthPosition(Node* head,  int k){
         printf("Invalid Position\n");
         return NULL;
     }
-    temp->next = temp->next->next;
+    prev->next = temp->next;
+    free(temp);
     return head;
 
 }
@@ -85,8 +94,8 @@ int main(){
     printNode(first);
     printf("\n");
 
-    first = deleteAtHead(first);
-     deleteAtTail(first);
+    // first = deleteAtHead(first);
+    //  deleteAtTail(first);
      int k;
      printf("Enter K = ");
      scanf("%d",&k);
